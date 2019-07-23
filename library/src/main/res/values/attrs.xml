@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SwitchButton" >
+        <attr name="sb_openBackground" format="color"/>
+        <attr name="sb_closeBackground" format="color"/>
+        <attr name="sb_circleColor" format="color"/>
+        <attr name="sb_circleRadius" format="dimension"/>
+        <attr name="sb_status">
+            <enum name="close" value="0"/>
+            <enum name="open" value="1"/>
+        </attr>
+        <attr name="sb_interpolator">
+            <enum name="Linear" value="0"/>
+            <enum name="Overshoot" value="1"/>
+            <enum name="Accelerate" value="2"/>
+            <enum name="Decelerate" value="3"/>
+            <enum name="AccelerateDecelerate" value="4"/>
+            <enum name="LinearOutSlowIn" value="5"/>
+        </attr>
+    </declare-styleable>
+
+</resources>
