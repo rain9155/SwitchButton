@@ -1,4 +1,0 @@
-#Tue Jul 23 16:15:52 CST 2019
-base.0=J\:\\AndroidSrc\\SwitchButton\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\5
-path.0=classes.dex
-renamed.0=classes.dex
