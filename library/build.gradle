@@ -27,3 +27,14 @@ android {
 dependencies {
     compileOnly 'com.android.support:appcompat-v7:28.0.0'
 }
+
+apply plugin: 'com.novoda.bintray-release'
+publish {
+    repoName = 'jianyu'
+    userOrg = "rain9155"
+    groupId = "com.jianyu"
+    artifactId = 'switchbutton'
+    publishVersion = "1.0.0"
+    desc = "a sliding button"
+    website = "https://github.com/rain9155/SwitchButton"
+}

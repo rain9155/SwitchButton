@@ -38,6 +38,10 @@ public class SwitchButton extends View {
     private static final String TAG = SwitchButton.class.getSimpleName();
     private static final int OFFSET = 6;
     private static final int ANIM_TIME = 200;
+    private static final int DEFAULT_OPEN_BACKGROUND = 0xFF4CAF50;
+    private static final int DEFAULT_CLOSE_BACKGROUND = Color.GRAY;
+    private static final int DEFAULT_CIRCLE_COLOR = Color.WHITE;
+    private static final int DEFAULT_CIRCLE_RADIUS = 0;
     private static final int LINEAR = 0;//以常量速率改变
     public static final int OVER_SHOOT = 1;//向前甩一定值后再回到原来位置
     public static final int ACCELERATE = 2;//开始慢，后面加速
@@ -58,7 +62,6 @@ public class SwitchButton extends View {
     private int mMinDistance;//判断是否点击的最小距离
     private boolean isAnim;
     private ValueAnimator mValueAnimator;
-
 
     private int mOpenBackground;//按钮打开后背景色
     private int mCloseBackground;//按钮关闭后的背景色
@@ -86,10 +89,10 @@ public class SwitchButton extends View {
 
     private void init(Context context, @Nullable AttributeSet attrs) {
         TypedArray typedValue = context.obtainStyledAttributes(attrs, R.styleable.SwitchButton);
-        mOpenBackground = typedValue.getColor(R.styleable.SwitchButton_sb_openBackground, 0xFF4CAF50);
-        mCloseBackground = typedValue.getColor(R.styleable.SwitchButton_sb_closeBackground, Color.GRAY);
-        mCircleColor = typedValue.getColor(R.styleable.SwitchButton_sb_circleColor, Color.WHITE);
-        mCircleRadius = typedValue.getDimension(R.styleable.SwitchButton_sb_circleRadius, 0);
+        mOpenBackground = typedValue.getColor(R.styleable.SwitchButton_sb_openBackground, DEFAULT_OPEN_BACKGROUND);
+        mCloseBackground = typedValue.getColor(R.styleable.SwitchButton_sb_closeBackground, DEFAULT_CLOSE_BACKGROUND);
+        mCircleColor = typedValue.getColor(R.styleable.SwitchButton_sb_circleColor, DEFAULT_CIRCLE_COLOR);
+        mCircleRadius = typedValue.getDimension(R.styleable.SwitchButton_sb_circleRadius, DEFAULT_CIRCLE_RADIUS);
         isOpen = typedValue.getInt(R.styleable.SwitchButton_sb_status, 0) != 0;
         mInterpolator = getInterpolator(typedValue.getInt(R.styleable.SwitchButton_sb_interpolator, -1));
         typedValue.recycle();
@@ -98,7 +101,6 @@ public class SwitchButton extends View {
         mPathWayPaint.setStyle(Paint.Style.FILL);
         int pathWayColor = isOpen ? mOpenBackground : mCloseBackground;
         mPathWayPaint.setColor(pathWayColor);
-
         mCirclePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCirclePaint.setStyle(Paint.Style.FILL);
         mCirclePaint.setColor(mCircleColor);
@@ -109,15 +111,8 @@ public class SwitchButton extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 isAnim = false;
-                isOpen = !isOpen;
                 mPreAnimatedValue = 0;
-                toBolder(isOpen);
-                if(mStatusListener != null){
-                    if(isOpen)
-                        mStatusListener.onOpen();
-                    else
-                        mStatusListener.onClose();
-                }
+                toBolder(!isOpen);
             }
 
             @Override
@@ -209,7 +204,7 @@ public class SwitchButton extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 float distance = event.getX() - startX;
-                mCircleCenter += distance / 10;
+                mCircleCenter += distance;
                 //控制范围
                 if (mCircleCenter > mRightRectangleBolder) {//最右
                     toBolder(true);
@@ -221,7 +216,7 @@ public class SwitchButton extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 float offset = Math.abs(event.getX() - Math.abs(startX));
-                //分2种情况，1.点击 2.没滑过中点
+                //分2种情况
                 if (offset < mMinDistance) { //1.点击, 按下和抬起的距离小于mMinDistance确定是点击了
                     //不在动画的时候可以点击
                     if (!isAnim) {
@@ -267,7 +262,6 @@ public class SwitchButton extends View {
      * @param isOpen 是否打开状态
      */
     private void toBolder(boolean isOpen) {
-        this.isOpen = isOpen;
         if(isOpen){
             mCircleCenter = mRightRectangleBolder;
             mPathWayPaint.setColor(mOpenBackground);
@@ -276,6 +270,13 @@ public class SwitchButton extends View {
             mPathWayPaint.setColor(mCloseBackground);
         }
         invalidate();
+        if(mStatusListener != null && isOpen() != isOpen){
+            if(isOpen)
+                mStatusListener.onOpen();
+            else
+                mStatusListener.onClose();
+        }
+        this.isOpen = isOpen;
     }
 
     /**
@@ -348,14 +349,12 @@ public class SwitchButton extends View {
         mValueAnimator.setInterpolator(mInterpolator);
     }
 
-    public void setCircleRadius(float circleRadius) {
-        if(!checkCircleRaduis(circleRadius)) return;
-        mCircleRadius = circleRadius;
-        invalidate();
+    public void setOnStatusListener(OnStatusListener onStatusListener){
+        this.mStatusListener = onStatusListener;
     }
 
-    public void setClickListener(OnStatusListener onStatusListener){
-        this.mStatusListener = onStatusListener;
+    public boolean isOpen() {
+        return isOpen;
     }
 
     /**
