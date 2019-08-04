@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
-import android.support.annotation.InterpolatorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.AttributeSet;
@@ -55,7 +54,6 @@ public class SwitchButton extends View {
     private int mLeftRectangleBolder;//矩形左边界x坐标
     private float mCircleCenter; //小圆圆心x坐标
     private float mPreAnimatedValue;
-    private int midX; //左圆圆心和右圆圆心中间的坐标
     private float startX; //按下的x坐标
     private Paint mPathWayPaint;//轨道画笔
     private Paint mCirclePaint;//小圆画笔
@@ -196,6 +194,7 @@ public class SwitchButton extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //不在动画的时候可以点击
         if(isAnim) return false;
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
@@ -204,42 +203,39 @@ public class SwitchButton extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 float distance = event.getX() - startX;
-                mCircleCenter += distance;
+                mCircleCenter += distance / 10;
                 //控制范围
                 if (mCircleCenter > mRightRectangleBolder) {//最右
-                    toBolder(true);
+                    mCircleCenter = mRightRectangleBolder;
                 } else if (mCircleCenter < mLeftRectangleBolder) {//最左
-                    toBolder(false);
-                }else {
-                    invalidate();
+                    mCircleCenter = mLeftRectangleBolder;
                 }
+                invalidate();
                 break;
             case MotionEvent.ACTION_UP:
                 float offset = Math.abs(event.getX() - Math.abs(startX));
+                float diff;
                 //分2种情况
                 if (offset < mMinDistance) { //1.点击, 按下和抬起的距离小于mMinDistance确定是点击了
-                    //不在动画的时候可以点击
-                    if (!isAnim) {
-                        if(isOpen){
-                            float diff = mLeftRectangleBolder - mCircleCenter;
-                            mValueAnimator.setFloatValues(0, diff);
+                    if(isOpen){
+                        diff = mLeftRectangleBolder - mCircleCenter;
 
-                        }else{
-                            float diff = mRightRectangleBolder - mCircleCenter;
-                            mValueAnimator.setFloatValues(0, diff);
-                        }
-                        mValueAnimator.start();
+                    }else{
+                        diff = mRightRectangleBolder - mCircleCenter;
                     }
-                } else { //2.没滑过中点,回归原点
-                    //滑到中间的x坐标
-                    midX = getWidth() / 2;
-                    if (mCircleCenter > midX) {//最右
-                        toBolder(true);
-                    } else {//最左
-                        toBolder(false);
+                } else {//2.滑动
+                    if (mCircleCenter > getWidth() / 2) {//滑过中点，滑到最右
+                        this.isOpen = false;
+                        diff = mRightRectangleBolder - mCircleCenter;
+                    } else{//没滑过中点,回归原点
+                        this.isOpen = true;
+                        diff = mLeftRectangleBolder - mCircleCenter;
                     }
                 }
-                 break;
+                mValueAnimator.setFloatValues(0, diff);
+                mValueAnimator.start();
+                startX = 0;
+                break;
             default:
                 break;
         }
@@ -270,7 +266,7 @@ public class SwitchButton extends View {
             mPathWayPaint.setColor(mCloseBackground);
         }
         invalidate();
-        if(mStatusListener != null && isOpen() != isOpen){
+        if(mStatusListener != null && this.isOpen != isOpen){
             if(isOpen)
                 mStatusListener.onOpen();
             else
@@ -288,6 +284,17 @@ public class SwitchButton extends View {
         float defaultCircleRadius = mLeftSemiCircleRadius - OFFSET;
         return radius > 0 && radius < defaultCircleRadius;
     }
+
+
+    /**
+     * 检查坐标点是否在小圆中
+     * @param x 触摸点的x坐标
+     * @return true表示在
+     */
+    private boolean checkPointInCricle(float x) {
+        return x > mCircleCenter - mCircleRadius && x < mCircleCenter + mCircleRadius;
+    }
+
 
     /**
      * 获得差值器
