@@ -1,5 +1,5 @@
 # SwitchButton
-### 仿微信的滑动按钮，如有问题欢迎issue
+### 仿微信的滑动按钮，如有问题欢迎[issue](https://github.com/rain9155/SwitchButton/issues)
 
 ## Pre
 
@@ -7,7 +7,7 @@
 
 ## Preview
 
-{% asset_img sb1.gif sb1 %}
+![sb1](/screenshots/sb1.gif)
 
 ## How to install?
 
