@@ -50,19 +50,24 @@ switchButton.setOnStatusListener(new SwitchButton.OnStatusListener() {
             public void onClose() {
                 Toast.makeText(MainActivity.this, "关闭", Toast.LENGTH_SHORT).show();
             }
-        });
+        });//SwitchButton.OnStatusListener()是按钮打开和关闭的状态回调
 switchButton.setCircleColor(Color.WHITE);
 switchButton.setCloseBackground(Color.GRAY);
 switchButton.setOpenBackground(Color.MAGENTA);
 switchButton.setInterpolator(SwitchButton.OVER_SHOOT);
-switchButton.open();
+switchButton.open();//同理，有一个close()函数
 ```
 
 circleRadius只能在xml中配置。
 
 ## Attrs
 
-| 名字 | 格式 | 描述 |
-| :--: | :--: | :--: |
-|      |      |      |
+|        名字        |                    描述                    |
+| :----------------: | :----------------------------------------: |
+| sb_openBackground  |           按钮打开状态的轨道颜色           |
+| sb_closeBackground |           按钮关闭状态的轨道颜色           |
+|  sb_circleRadius   |              按钮的小圆的半径              |
+|   sb_circleColor   |              按钮的小圆的颜色              |
+|     sb_status      |       按钮的初始状态：open 或 close        |
+|  sb_interpolator   | 按钮滑动时的速度，默认是Linear，即线性速度 |
 
