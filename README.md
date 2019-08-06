@@ -10,6 +10,12 @@
 ![sb1](/screenshots/sb1.gif)
 
 ## How to install?
+在app目录的build.gradle中添加，如下：
+```
+dependencies{
+    implementation 'com.jianyu:switchbutton:1.0.0'
+}
+```
 
 ## How to use?
 
