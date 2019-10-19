@@ -1,4 +1,5 @@
 # SwitchButton
+[ ![Download](https://api.bintray.com/packages/rain9155/jianyu/switchbutton/images/download.svg) ](https://bintray.com/rain9155/jianyu/switchbutton/_latestVersion)
 ### 仿微信的滑动按钮，如有问题欢迎[issue](https://github.com/rain9155/SwitchButton/issues)
 
 ## Pre
