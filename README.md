@@ -22,7 +22,7 @@ allprojects {
 ```
 
 在app目录的build.gradle中引入依赖：
-```
+```groovy
 dependencies{
     implementation 'io.github.rain9155:switchbutton:1.0.1'
 }
