@@ -1,15 +1,22 @@
 # SwitchButton
-### 仿微信的滑动按钮，如有问题欢迎[issue](https://github.com/rain9155/SwitchButton/issues)
+[ ![Download](https://api.bintray.com/packages/rain9155/jianyu/switchbutton/images/download.svg) ](https://bintray.com/rain9155/jianyu/switchbutton/_latestVersion)
+### 仿微信的滑动按钮，如有问题欢迎[issue](https://github.com/rain9155/SwitchButton/issues), 实现步骤请查看[仿微信滑动按钮的实现](https://juejin.im/post/5d48e06d51882505723c9d30)这篇文章
 
 ## Pre
 
-虽然Android原生自带一个Switch按钮，但是我觉得还是自己动手做的更好用一些，于是就仿照微信设置的滑动按钮自己实现了一下，除了颜色，看起来和微信的差不多，而且实现的原理还挺简单。
+虽然Android原生自带一个Switch按钮，但是我觉得还是自己动手做的更好用一些，于是就仿照微信设置的滑动按钮自己实现了一下，除了颜色，看起来和微信的差不多，而且实现的[原理](https://juejin.im/post/5d48e06d51882505723c9d30)还挺简单。
 
 ## Preview
 
 ![sb1](/screenshots/sb1.gif)
 
 ## How to install?
+在app目录的build.gradle中添加，如下：
+```
+dependencies{
+    implementation 'com.jianyu:switchbutton:1.0.0'
+}
+```
 
 ## How to use?
 
@@ -60,7 +67,7 @@ switchButton.open();//同理，有一个close()函数
 
 circleRadius只能在xml中配置。
 
-## Attrs
+### Attrs
 
 |        名字        |                    描述                    |
 | :----------------: | :----------------------------------------: |
@@ -70,4 +77,21 @@ circleRadius只能在xml中配置。
 |   sb_circleColor   |              按钮的小圆的颜色              |
 |     sb_status      |       按钮的初始状态：open 或 close        |
 |  sb_interpolator   | 按钮滑动时的速度，默认是Linear，即线性速度 |
+
+## Licensed
+```
+Copyright 2019 rain9155
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License a
+
+          http://www.apache.org/licenses/LICENSE-2.0 
+          
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
 
